@@ -1,4 +1,4 @@
-# my_project
+# CJ_project
 
 ## How to Run the Project using Docker
 
