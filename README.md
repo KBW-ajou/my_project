@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CJ_Project
 
 ## How to Run the Project using Docker
@@ -72,3 +73,16 @@ Dockerfile을 사용하여 프로젝트를 실행하려면, 위의 지침을 따
 ## Contact
 
 질문이나 문제가 있을 경우 [monkey99@ajou.ac.kr](mailto:monkey99@ajou.ac.kr)으로 연락해 주세요.
+=======
+# CJ_project
+
+## How to Run the Project using Docker
+
+1. **Build the Docker image**
+
+   ```bash
+   docker build -t my_project_image .
+
+## Run the Docker container
+docker run -it --name my_project_container -p 8888:8888 my_project_image
+>>>>>>> dff61d3ac28914df078e0f7df3b46fbb6b69f662
