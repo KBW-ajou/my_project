@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 # Create and activate virtual environment
 RUN python3 -m venv myenv
-RUN /bin/bash -c "source myenv/bin/activate"
+RUN /bin/bash -c "source myenv/bin/activate && pip install jupyter"
 
 # Copy the requirements file
 COPY requirements.txt .

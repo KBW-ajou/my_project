@@ -1,6 +1,5 @@
 pandas
 numpy
-networkx
 jupyter
 matplotlib
 scikit-learn
