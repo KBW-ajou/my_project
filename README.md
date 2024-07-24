@@ -67,7 +67,7 @@ Dockerfile을 사용하여 프로젝트를 실행하려면, 위의 지침을 따
 ## Example Usage
 
 1. Jupyter Notebook을 엽니다.
-2. `CJ_부룽부룽.ipynb` 노트북 파일을 실행합니다.
+2. `main.ipynb` 노트북 파일을 실행합니다.
 3. `Order_Result.csv` 및 `Veh_Result.csv` 결과 파일을 확인합니다.
 
 ## Contact
