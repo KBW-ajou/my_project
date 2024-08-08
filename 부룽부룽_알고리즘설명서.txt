@@ -1,0 +1,31 @@
+## 알고리즘 설명서:
+
+알고리즘의 흐름
+1. 주문들을 착지별 배송가능 시간으로 먼저 클러스터링한 후, 시간 별 클러스터 내에서 좌표별로 클러스터링함
+2. 같은 클러스터 내에서 sort_and_make_bin 함수를 통해, 주문들을 묶음. 라우팅 알고리즘을 통해 경로 최적화 후 시간 계산
+3. Bin 내의 주문 중 시간 제약에 위배되는 Bin을 분할하고 다시 라우팅 알고리즘을 통해 경로를 최적화함
+4. 3번 과정에서 분할된 Bin들을 다시 재조합 하는 과정 진행 후 3번 과정 재실행 
+5. Code cell 21의 차량 결정 함수를 통해 Bin 별로 적절한 차량 결정
+6. 차량을 Max_Round에 최대한 가까운 수로 운용할 수 있도록 Code cell 23의 차량 배차 알고리즘을 통해 Bin을 차량에 할당
+
+Code cell 1 : 라이브러리 불러오기
+Code cell 2: 데이터 파일 불러오기
+Code cell 3~4: 주문 데이터프레임 병합
+Code cell 5~6: 착지별 차량 진입 제한에 따른 데이터 분류 (진입제약이 1000인 착지, 진입제약이 1000보다 크면서 주문과 plt가 3500톤 이하 차량에 할당 받을 수 있는 주문, 그 외 주문
+Code cell 7~8: 클러스터링 함수 정의, 배송 가능 시간에 따른 클러스터링 이후, 위치(좌표)에 따른 클러스터링, 요일별, Code cell 5~6에서 분류한 데이터프레임별 클러스터링
+Code cell 9: OD_Matrix 파일을 Origin, Destination에 따른 이동 시간과 이동 거리로 반환 가능함
+Code cell 10: 빈 생성 알고리즘을 통한 주문 그루핑, 한 클러스터 내에서 주문 무게에 따라 내림차순 정리 후 제약 조건을 반영하여 여러 Bin으로 분배 (같은 착지의 주문은 제약조건에 위배되지 않는 한 같은 Bin에 속할 수 있도록 함)
+Code cell 11: 시간 계산 함수, 현재 시간과 더할 시간(분)을 입력하면 시간이 더해진 후 시간을 알 수 있음 (ex) 1.56: 1시 56분
+Code cell 12: 여러가지 시간을 구할 수 있는 함수, moving_time: 한 차량 별 round 당 차량이 움직이는 시간, working_time: 첫번째 착지부터 마지막 착지까지 차량이 움직이는 시간, out_time: 터미널에서 첫번째 착지로 차량이 이동하는 시간, in_time: 마지막 착지에서 터미널로 차량이 이동하는 시간
+Code cell 12: 움직인 거리를 구할 수 있는 함수, 한 차량이 한 round를 돌 때 이동하는 거리
+Code cell 13: 하차시간 계산 함수, plt를 고려해 착지별 하차시간을 구할 수 있음
+Code cell 14: 라우팅 알고리즘, Nearest Neighbor 알고리즘으로 초기해를 구하고 two opt 알고리즘으로 경로를 개선함.
+Code cell 15: Code cell 10에서 생성한 Bin을 시간 제약을 지킬 수 있도록 분할하는 알고리즘.
+extract_bin 함수 : 윗 단계에서 분할된 각 bin들 중 standard 함수 입력 인자를 통해 조건문을 만족하지 못하는 Bin들 추출
+decending_bin 함수 : extract_bin 함수에서 추출된 Bin들을 weight 기준으로 내림차순 정렬
+reposition_bin 함수 : decending_bin 함수에서 return 된 Bin 들을 reverse 시켜 본 bin들과 reverse 빈들끼리 max_weight, max_plt 조건을 만족하는 Bin 재생성
+confrim_bin 함수 :  Bin_slicing  --> extract_bin --> decending_bin --> reposition_bin --> Bin_slicing -->..... 과정들을 반복시켜주며 제약 조건을 만족하는 route 추출
+Code cell 21: Bin의 주문에 맞는 조건에 최적(weight, plt 고려)인 차량을 결정하는 함수
+Code cell 23: 차량 배차 알고리즘. 차량이 움직이고 하차하는 총 시간이 긴 route부터 내림차순으로 정렬한 뒤 차량에 할당함. 이미 한번 쓰인 차량(첫 round를 돈 차량)에 우선 배치하고 조건에 맞는 차량이 없을 시, 새로운 차량에 Bin을 배치
+
+* 주문 결과 테이블에서 Arrival_Time 및 Departure_Time 단위 : 연도/월/일/시간/분
